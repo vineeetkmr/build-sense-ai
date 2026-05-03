@@ -1,10 +1,12 @@
 import { useState, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Activity, Upload, Sparkles, AlertCircle, Github, Workflow, FileCode, Zap, Trash2, Copy, Check } from "lucide-react";
+import { Activity, Upload, Sparkles, AlertCircle, Github, Workflow, FileCode, Zap, Trash2, Copy, Check, Baby } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
 const SAMPLE_LOG = `npm ERR! code ERESOLVE
@@ -28,6 +30,8 @@ const Index = () => {
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [copiedFix, setCopiedFix] = useState(false);
+  const [eli5, setEli5] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
 
@@ -46,7 +50,7 @@ const Index = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({ log }),
+        body: JSON.stringify({ log, eli5 }),
       });
 
       if (!resp.ok || !resp.body) {
@@ -113,6 +117,18 @@ const Index = () => {
     setTimeout(() => setCopied(false), 1500);
   };
 
+  const copyFix = async () => {
+    // Extract content under "Suggested fix" heading(s)
+    const matches = [...result.matchAll(/##\s*(?:\d+\.\s*)?Suggested\s*fix\s*\n([\s\S]*?)(?=\n##\s|\n###\s|$)/gi)];
+    const fix = matches.length
+      ? matches.map((m) => m[1].trim()).join("\n\n---\n\n")
+      : result;
+    await navigator.clipboard.writeText(fix);
+    setCopiedFix(true);
+    toast.success("Fix copied to clipboard");
+    setTimeout(() => setCopiedFix(false), 1500);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-hero">
       {/* Nav */}
@@ -123,7 +139,7 @@ const Index = () => {
               <Activity className="w-5 h-5 text-primary-foreground" strokeWidth={2.5} />
             </div>
             <div>
-              <h1 className="font-mono font-bold text-lg tracking-tight">BuildSense</h1>
+              <h1 className="font-mono font-bold text-lg tracking-tight">Buildsense AI</h1>
               <p className="text-[10px] text-muted-foreground -mt-1 font-mono">CI/CD log analyzer</p>
             </div>
           </div>
@@ -199,10 +215,18 @@ const Index = () => {
               className="min-h-[420px] resize-none border-0 rounded-none bg-transparent font-mono text-xs leading-relaxed focus-visible:ring-0"
               spellCheck={false}
             />
-            <div className="px-4 py-3 border-t border-border/60 flex items-center justify-between">
-              <span className="text-xs font-mono text-muted-foreground">
-                {log.length.toLocaleString()} chars
-              </span>
+            <div className="px-4 py-3 border-t border-border/60 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-4">
+                <span className="text-xs font-mono text-muted-foreground">
+                  {log.length.toLocaleString()} chars
+                </span>
+                <div className="flex items-center gap-2">
+                  <Switch id="eli5" checked={eli5} onCheckedChange={setEli5} />
+                  <Label htmlFor="eli5" className="text-xs font-mono cursor-pointer flex items-center gap-1">
+                    <Baby className="w-3.5 h-3.5" /> ELI5 Mode
+                  </Label>
+                </div>
+              </div>
               <Button
                 onClick={analyze}
                 disabled={loading || !log.trim()}
@@ -211,7 +235,7 @@ const Index = () => {
                 {loading ? (
                   <><Activity className="w-4 h-4 mr-2 animate-pulse" /> Analyzing…</>
                 ) : (
-                  <><Sparkles className="w-4 h-4 mr-2" /> Analyze Log</>
+                  <><Sparkles className="w-4 h-4 mr-2" /> Analyze Logs</>
                 )}
               </Button>
             </div>
@@ -223,12 +247,19 @@ const Index = () => {
               <div className="flex items-center gap-2">
                 <AlertCircle className="w-3.5 h-3.5 text-accent" />
                 <span className="text-xs font-mono text-muted-foreground">analysis.md</span>
+                {eli5 && <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/30">ELI5</span>}
               </div>
               {result && !loading && (
-                <Button variant="ghost" size="sm" className="h-7 text-xs font-mono" onClick={copyResult}>
-                  {copied ? <Check className="w-3 h-3 mr-1" /> : <Copy className="w-3 h-3 mr-1" />}
-                  {copied ? "Copied" : "Copy"}
-                </Button>
+                <div className="flex items-center gap-1">
+                  <Button variant="ghost" size="sm" className="h-7 text-xs font-mono" onClick={copyFix}>
+                    {copiedFix ? <Check className="w-3 h-3 mr-1" /> : <Copy className="w-3 h-3 mr-1" />}
+                    {copiedFix ? "Copied" : "Copy Fix"}
+                  </Button>
+                  <Button variant="ghost" size="sm" className="h-7 text-xs font-mono" onClick={copyResult}>
+                    {copied ? <Check className="w-3 h-3 mr-1" /> : <Copy className="w-3 h-3 mr-1" />}
+                    {copied ? "Copied" : "Copy All"}
+                  </Button>
+                </div>
               )}
             </div>
 
