@@ -117,6 +117,18 @@ const Index = () => {
     setTimeout(() => setCopied(false), 1500);
   };
 
+  const copyFix = async () => {
+    // Extract content under "Suggested fix" heading(s)
+    const matches = [...result.matchAll(/##\s*(?:\d+\.\s*)?Suggested\s*fix\s*\n([\s\S]*?)(?=\n##\s|\n###\s|$)/gi)];
+    const fix = matches.length
+      ? matches.map((m) => m[1].trim()).join("\n\n---\n\n")
+      : result;
+    await navigator.clipboard.writeText(fix);
+    setCopiedFix(true);
+    toast.success("Fix copied to clipboard");
+    setTimeout(() => setCopiedFix(false), 1500);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-hero">
       {/* Nav */}
