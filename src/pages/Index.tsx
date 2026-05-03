@@ -215,10 +215,18 @@ const Index = () => {
               className="min-h-[420px] resize-none border-0 rounded-none bg-transparent font-mono text-xs leading-relaxed focus-visible:ring-0"
               spellCheck={false}
             />
-            <div className="px-4 py-3 border-t border-border/60 flex items-center justify-between">
-              <span className="text-xs font-mono text-muted-foreground">
-                {log.length.toLocaleString()} chars
-              </span>
+            <div className="px-4 py-3 border-t border-border/60 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-4">
+                <span className="text-xs font-mono text-muted-foreground">
+                  {log.length.toLocaleString()} chars
+                </span>
+                <div className="flex items-center gap-2">
+                  <Switch id="eli5" checked={eli5} onCheckedChange={setEli5} />
+                  <Label htmlFor="eli5" className="text-xs font-mono cursor-pointer flex items-center gap-1">
+                    <Baby className="w-3.5 h-3.5" /> ELI5 Mode
+                  </Label>
+                </div>
+              </div>
               <Button
                 onClick={analyze}
                 disabled={loading || !log.trim()}
@@ -227,7 +235,7 @@ const Index = () => {
                 {loading ? (
                   <><Activity className="w-4 h-4 mr-2 animate-pulse" /> Analyzing…</>
                 ) : (
-                  <><Sparkles className="w-4 h-4 mr-2" /> Analyze Log</>
+                  <><Sparkles className="w-4 h-4 mr-2" /> Analyze Logs</>
                 )}
               </Button>
             </div>
@@ -239,12 +247,19 @@ const Index = () => {
               <div className="flex items-center gap-2">
                 <AlertCircle className="w-3.5 h-3.5 text-accent" />
                 <span className="text-xs font-mono text-muted-foreground">analysis.md</span>
+                {eli5 && <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-accent/10 text-accent border border-accent/30">ELI5</span>}
               </div>
               {result && !loading && (
-                <Button variant="ghost" size="sm" className="h-7 text-xs font-mono" onClick={copyResult}>
-                  {copied ? <Check className="w-3 h-3 mr-1" /> : <Copy className="w-3 h-3 mr-1" />}
-                  {copied ? "Copied" : "Copy"}
-                </Button>
+                <div className="flex items-center gap-1">
+                  <Button variant="ghost" size="sm" className="h-7 text-xs font-mono" onClick={copyFix}>
+                    {copiedFix ? <Check className="w-3 h-3 mr-1" /> : <Copy className="w-3 h-3 mr-1" />}
+                    {copiedFix ? "Copied" : "Copy Fix"}
+                  </Button>
+                  <Button variant="ghost" size="sm" className="h-7 text-xs font-mono" onClick={copyResult}>
+                    {copied ? <Check className="w-3 h-3 mr-1" /> : <Copy className="w-3 h-3 mr-1" />}
+                    {copied ? "Copied" : "Copy All"}
+                  </Button>
+                </div>
               )}
             </div>
 
