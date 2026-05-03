@@ -1,13 +1,14 @@
 import { useState, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Activity, Upload, Sparkles, AlertCircle, Github, Workflow, FileCode, Zap, Trash2, Copy, Check, Baby } from "lucide-react";
+import { Activity, Upload, Sparkles, AlertCircle, Github, Workflow, FileCode, Zap, Trash2, Copy, Check, Baby, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
 const SAMPLE_LOG = `npm ERR! code ERESOLVE
 npm ERR! ERESOLVE unable to resolve dependency tree
@@ -26,6 +27,7 @@ npm ERR!   react-some-lib@"^2.1.0" from the root project
 const ENDPOINT = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/analyze-log`;
 
 const Index = () => {
+  const { user, signOut } = useAuth();
   const [log, setLog] = useState("");
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
@@ -143,12 +145,17 @@ const Index = () => {
               <p className="text-[10px] text-muted-foreground -mt-1 font-mono">CI/CD log analyzer</p>
             </div>
           </div>
-          <a
-            href="#analyze"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block"
-          >
-            Try it →
-          </a>
+          <div className="flex items-center gap-3">
+            {user?.email && (
+              <span className="hidden sm:inline text-xs font-mono text-muted-foreground truncate max-w-[180px]">
+                {user.email}
+              </span>
+            )}
+            <Button variant="ghost" size="sm" onClick={signOut} className="font-mono text-xs">
+              <LogOut className="w-3.5 h-3.5 mr-1.5" />
+              Sign out
+            </Button>
+          </div>
         </div>
       </header>
 
