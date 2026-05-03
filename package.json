@@ -12,6 +12,7 @@
     "test": "vitest run",
     "test:watch": "vitest"
   },
+  "homepage": "https://vineeetkmr.github.io/build-sense-ai",
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
     "@lovable.dev/cloud-auth-js": "^1.1.2",
