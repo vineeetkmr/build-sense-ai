@@ -1,13 +1,14 @@
 import { useState, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Activity, Upload, Sparkles, AlertCircle, Github, Workflow, FileCode, Zap, Trash2, Copy, Check, Baby } from "lucide-react";
+import { Activity, Upload, Sparkles, AlertCircle, Github, Workflow, FileCode, Zap, Trash2, Copy, Check, Baby, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
 const SAMPLE_LOG = `npm ERR! code ERESOLVE
 npm ERR! ERESOLVE unable to resolve dependency tree
