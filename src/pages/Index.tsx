@@ -30,6 +30,8 @@ const Index = () => {
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [copiedFix, setCopiedFix] = useState(false);
+  const [eli5, setEli5] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
 
