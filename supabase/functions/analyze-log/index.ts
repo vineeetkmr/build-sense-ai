@@ -31,7 +31,7 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { log } = await req.json();
+    const { log, eli5 } = await req.json();
     if (!log || typeof log !== "string" || log.trim().length < 10) {
       return new Response(JSON.stringify({ error: "Please provide a build log." }), {
         status: 400,
