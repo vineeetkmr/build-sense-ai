@@ -54,7 +54,7 @@ Deno.serve(async (req) => {
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages: [
-          { role: "system", content: SYSTEM_PROMPT },
+          { role: "system", content: SYSTEM_PROMPT + (eli5 ? "\n\nELI5 MODE: Explain like the developer is a beginner. Use very simple words, short sentences, and friendly analogies. Avoid jargon unless you immediately define it." : "\n\nMODE: Full technical detail for an experienced developer.") },
           { role: "user", content: "Analyze this CI/CD build log:\n\n```\n" + trimmed + "\n```" },
         ],
         stream: true,
