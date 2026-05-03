@@ -139,7 +139,7 @@ const Index = () => {
               <Activity className="w-5 h-5 text-primary-foreground" strokeWidth={2.5} />
             </div>
             <div>
-              <h1 className="font-mono font-bold text-lg tracking-tight">BuildSense</h1>
+              <h1 className="font-mono font-bold text-lg tracking-tight">Buildsense AI</h1>
               <p className="text-[10px] text-muted-foreground -mt-1 font-mono">CI/CD log analyzer</p>
             </div>
           </div>
