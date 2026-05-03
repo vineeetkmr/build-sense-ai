@@ -145,12 +145,17 @@ const Index = () => {
               <p className="text-[10px] text-muted-foreground -mt-1 font-mono">CI/CD log analyzer</p>
             </div>
           </div>
-          <a
-            href="#analyze"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block"
-          >
-            Try it →
-          </a>
+          <div className="flex items-center gap-3">
+            {user?.email && (
+              <span className="hidden sm:inline text-xs font-mono text-muted-foreground truncate max-w-[180px]">
+                {user.email}
+              </span>
+            )}
+            <Button variant="ghost" size="sm" onClick={signOut} className="font-mono text-xs">
+              <LogOut className="w-3.5 h-3.5 mr-1.5" />
+              Sign out
+            </Button>
+          </div>
         </div>
       </header>
 
