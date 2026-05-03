@@ -24,18 +24,13 @@ const config: Config.InitialOptions = {
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
   transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest',
+    '^.+\\.(ts|tsx)$': ['ts-jest', {
+      tsconfig: 'tsconfig.jest.json',
+    }],
   },
   transformIgnorePatterns: [
     'node_modules/(?!(@testing-library|react|@radix-ui)/)',
   ],
-  globals: {
-    'ts-jest': {
-      tsconfig: {
-        jsx: 'react-jsx',
-      },
-    },
-  },
 };
 
 export default config;

@@ -69,7 +69,7 @@ npm run test:jest
 npm run test:jest:watch
 
 # Run Jest tests with coverage
-npm run test:jest:coverage
+npm run test:coverage
 ```
 
 ### Test Structure
@@ -89,7 +89,7 @@ npm run test:jest:coverage
 - `npm run test:watch` - Run Vitest in watch mode
 - `npm run test:jest` - Run Jest tests
 - `npm run test:jest:watch` - Run Jest in watch mode
-- `npm run test:jest:coverage` - Run Jest with coverage
+- `npm run test:coverage` - Run Jest with coverage
 
 ## Project Structure
 
@@ -107,14 +107,26 @@ src/
 └── main.tsx           # Application entry point
 ```
 
-## Technologies Used
+## CI/CD
 
-- **Frontend Framework**: React 18
-- **Build Tool**: Vite
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **UI Components**: shadcn/ui (Radix UI)
-- **Routing**: React Router
-- **State Management**: TanStack Query
-- **Testing**: Vitest, Jest, React Testing Library
-- **Backend**: Supabase
+This project uses GitHub Actions for continuous integration. The CI pipeline runs on every push and pull request to the `main` branch and includes:
+
+- **Linting** - ESLint code quality checks
+- **Unit Tests** - Jest test suite execution
+- **Build** - Production build verification
+
+### CI Requirements
+
+The build will **fail** if:
+- ESLint finds any linting errors
+- Any unit test fails
+- The production build fails
+
+### Testing in CI
+
+The CI runs Jest tests with the following command:
+```bash
+npm run test:jest
+```
+
+All tests must pass for the build to succeed.
