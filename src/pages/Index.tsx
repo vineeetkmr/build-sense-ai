@@ -27,6 +27,7 @@ npm ERR!   react-some-lib@"^2.1.0" from the root project
 const ENDPOINT = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/analyze-log`;
 
 const Index = () => {
+  const { user, signOut } = useAuth();
   const [log, setLog] = useState("");
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
